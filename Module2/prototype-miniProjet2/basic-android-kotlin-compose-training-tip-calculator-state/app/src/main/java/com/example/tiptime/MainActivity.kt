@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,14 +61,19 @@ fun TipCalculatorApp() {
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+
     ) {
         // Champ de saisie
         var amountInput by remember { mutableStateOf("") }
         TextField(
             value = amountInput,
             onValueChange = { amountInput = it },
-            label = { Text("Montant de l'addition") },
+            label = {
+                Text(
+                    text = "Montant de l'addition",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary ) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )
@@ -93,7 +99,10 @@ fun TipCalculatorApp() {
         Text("Total : %.2f MAD".format(totalAmount))
     }
 }
+@Composable
+fun MaterialTheme(){
 
+}
 @Preview(showBackground = true)
 @Composable
 fun TipTimeLayoutPreview() {
@@ -101,4 +110,6 @@ fun TipTimeLayoutPreview() {
         TipCalculatorApp()
     }
 }
+//Ajouter des couleurs pour le texte (TextStyle) et ajuster les marges.
+//Intégrer des icônes ou des séparateurs (Divider) pour améliorer la lisibilité.
 

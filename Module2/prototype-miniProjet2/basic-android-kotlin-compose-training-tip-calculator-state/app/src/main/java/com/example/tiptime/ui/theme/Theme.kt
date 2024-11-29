@@ -18,11 +18,13 @@ package com.example.tiptime.ui.theme
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val LightColorScheme = lightColorScheme(
@@ -102,14 +104,23 @@ fun TipTimeTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
+        colorScheme = lightColorScheme(
+            primary = Color(0xFF6200EE),
+            onPrimary = Color.White,
+            secondary = Color(0xFF03DAC6),
+            onSecondary = Color.Black,
+            background = Color(0xFFF5F5F5),
+            surface = Color.White,
+            onSurface = Color.Black,
+        ),
+        typography = Typography(
+            titleLarge = MaterialTheme.typography.titleLarge.copy(color= Color(0xFF6200EE))
+        ),
         content = content
     )
 }
