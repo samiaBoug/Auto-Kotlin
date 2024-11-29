@@ -13,9 +13,12 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.prototype_miniprojet3.ui.theme.PrototypeminiProjet3Theme
@@ -26,9 +29,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             PrototypeminiProjet3Theme {
-
-
-
+                AffirmationApp()
             }
         }
     }
@@ -42,7 +43,7 @@ val affirmations = listOf(
 )
 
 @Composable
-fun AffirmationList(affirmation: List<String>){
+fun AffirmationList(affirmations: List<String>){
     LazyColumn {
         items(affirmations){ affirmation->
             AffirmationCard(affirmation)
@@ -67,13 +68,26 @@ fun AffirmationCard(affirmation : String){
 
 @Composable
 fun AffirmationApp(){
-    MaterialTheme(){
-        
+    MaterialTheme(
+        colorScheme = lightColorScheme(
+            primary = Color(0xE1246521),
+            onPrimary = Color.White ,
+            background = Color(0xBCE8AE55),
+            surface =  Color(0xE17DEC7A),
+            onSurface = Color.Black
+        )
+    ){
+        Surface (
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ){
+            AffirmationList(affirmations)
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AffirmationCardPreview(){
-
+    AffirmationApp()
 }
