@@ -1,18 +1,4 @@
-/*
- * Copyright (C) 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 package com.example.tiptime
 
 import android.os.Bundle
@@ -32,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -58,79 +45,60 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    TipTimeLayout()
+                    TipCalculatorApp()
                 }
             }
         }
     }
 }
 
+
+
 @Composable
-fun TipTimeLayout() {
-    var amountInput by remember { mutableStateOf("") }
-
-    val amount = amountInput.toDoubleOrNull() ?: 0.0
-    val tip = calculateTip(amount)
-
+fun TipCalculatorApp() {
     Column(
         modifier = Modifier
-            .statusBarsPadding()
-            .padding(horizontal = 40.dp)
-            .verticalScroll(rememberScrollState())
-            .safeDrawingPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = stringResource(R.string.calculate_tip),
-            modifier = Modifier
-                .padding(bottom = 16.dp, top = 40.dp)
-                .align(alignment = Alignment.Start)
-        )
-        EditNumberField(
+        // Champ de saisie
+        var amountInput by remember { mutableStateOf("") }
+        TextField(
             value = amountInput,
-            onValueChanged = { amountInput = it },
-            modifier = Modifier.padding(bottom = 32.dp).fillMaxWidth()
+            onValueChange = { amountInput = it },
+            label = { Text("Montant de l'addition") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            modifier = Modifier.fillMaxWidth()
         )
-        Text(
-            text = stringResource(R.string.tip_amount, tip),
-            style = MaterialTheme.typography.displaySmall
-        )
-        Spacer(modifier = Modifier.height(150.dp))
+
+        // Slider
+        var tipPercentage by remember { mutableStateOf(15f) }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Pourcentage : ${tipPercentage.toInt()}%")
+            Slider(
+                value = tipPercentage,
+                onValueChange = { tipPercentage = it },
+                valueRange = 0f..30f,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        // Résultats
+        val amount = amountInput.toFloatOrNull() ?: 0f
+        val tipAmount = (amount * tipPercentage / 100)
+        val totalAmount = amount + tipAmount
+
+        Text("Pourboire : %.2f MAD".format(tipAmount))
+        Text("Total : %.2f MAD".format(totalAmount))
     }
-}
-
-@Composable
-fun EditNumberField(
-    value: String,
-    onValueChanged: (String) -> Unit,
-    modifier: Modifier
-) {
-    TextField(
-        value = value,
-        singleLine = true,
-        modifier = modifier,
-        onValueChange = onValueChanged,
-        label = { Text(stringResource(R.string.bill_amount)) },
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-    )
-}
-
-/**
- * Calculates the tip based on the user input and format the tip amount
- * according to the local currency.
- * Example would be "$10.00".
- */
-private fun calculateTip(amount: Double, tipPercent: Double = 15.0): String {
-    val tip = tipPercent / 100 * amount
-    return NumberFormat.getCurrencyInstance().format(tip)
 }
 
 @Preview(showBackground = true)
 @Composable
 fun TipTimeLayoutPreview() {
     TipTimeTheme {
-        TipTimeLayout()
+        TipCalculatorApp()
     }
 }
 
