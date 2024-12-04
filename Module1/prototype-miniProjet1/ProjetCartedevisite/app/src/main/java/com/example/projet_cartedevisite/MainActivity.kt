@@ -90,17 +90,31 @@ fun CarteDeVisite() {
         ContactInfo(
             label = "Téléphone :",
             value = "+212 6 12 34 56 78",
-            onClick = { /* Appeler */ }
+            onClick = {
+                val callIntent = Intent(Intent.ACTION_DIAL).apply {
+                    data = Uri.parse("tel:+33612345678")
+                }
+                context.startActivity(callIntent)
+            }
         )
         ContactInfo(
             label = "Email :",
             value = "bougtoubsamia@gmail.com",
-            onClick = { /* Envoyer un email */ }
+            onClick =  {
+                val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = Uri.parse("mailto:johndoe@example.com")
+                }
+                context.startActivity(emailIntent)
+            }
         )
         Spacer(modifier = Modifier.height(16.dp))
 
         // Bouton pour site web
-        Button(onClick = { /* Ouvrir le site */ }) {
+        Button(onClick = {  {
+            val websiteIntent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("https://www.johndoe.com")
+            }
+            context.startActivity(websiteIntent)}) {
             Text("Visiter mon site")
         }
 
